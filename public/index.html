@@ -10,17 +10,6 @@
 
     <h1>Subir Archivo para procesar</h1>
 
-    <div id="download">
-        <svg id="info" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3" width="30px">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-        </svg>
-        <button id="downloadButton" onclick="downloadFile()">Descargar Plantilla Modelo</button>
-        <!-- Enlace alternativo -->
-        <a href="https://docs.google.com/spreadsheets/d/1WnCRbwy1hAKCRkOaH30rX_z9VKgwbjbIooe98qQildw/export?format=csv" target="_blank" rel="noopener noreferrer" id="downloadLink">
-            Descargar Plantilla (Abrir en nueva pestaña)
-        </a>
-    </div>
-
     <form id="uploadForm" enctype="multipart/form-data">
         <label for="grupo">Nombre del Grupo de WhatsApp:</label>
         <input type="text" id="grupo" name="grupo" required>
@@ -46,15 +35,7 @@
         let dropArea = document.getElementById('drop-area');
         let fileInput = document.getElementById('fileElem');
 
-        // Descargar archivo con JavaScript
-        function downloadFile() {
-            const link = document.createElement('a');
-            link.href = 'https://docs.google.com/spreadsheets/d/1WnCRbwy1hAKCRkOaH30rX_z9VKgwbjbIooe98qQildw/export?format=csv';
-            link.download = 'PlantillaModelo.csv';
-            document.body.appendChild(link); // Agrega el enlace al DOM
-            link.click(); // Simula el clic
-            document.body.removeChild(link); // Elimina el enlace después del clic
-        }
+
 
         // Evitar el comportamiento por defecto de arrastrar y soltar
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
