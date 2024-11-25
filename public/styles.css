@@ -127,9 +127,15 @@ button:hover {
 }
 
 #downloadButton {
-    width: 15%;
+    padding: 10px 15px; /* Agrega espacio interno */
     margin-bottom: 5px;
+    width: auto; /* Deja que el ancho se ajuste automáticamente */
+    max-width: 100%; /* Evita que exceda el ancho del contenedor */
+    text-align: center;
+    font-size: 16px;
+    word-wrap: break-word; /* Rompe palabras largas si es necesario */
 }
+
 
 @keyframes l37 {
     80%, 100% {
@@ -153,10 +159,20 @@ button:hover {
         max-width: 100%;
         padding: 15px;
     }
+    #downloadButton {
+        font-size: 14px; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+        padding: 8px 10px; /* Reduce el padding */
+    }
+
+
 }
 
 @media (max-width: 480px) {
     .loader {
         width: 40px;
+    }
+    #downloadButton {
+        font-size: 14px; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+        padding: 8px 10px; /* Reduce el padding */
     }
 }
