@@ -5,37 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir Archivo</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #fff !important
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            color: #fff;
+            text-align: left;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+
+        #drop-area {
+            border: 2px dashed #007BFF;
+            padding: 20px;
+            border-radius: 30px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #drop-area.highlight {
+            background: #e3f2fd;
+        }
+
+        .button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background: #0056b3;
+        }
+
+        .loader {
+            display: none;
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 4px solid #007BFF;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-
-    <h1>Subir Archivo para procesar</h1>
-
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label for="grupo">Nombre del CSV:</label>
-        <input type="text" id="grupo" name="grupo" required>
+    <div class="container">
         
-        <br><br>
-        
-        <p>Arrastra y suelta un archivo aquí o haz clic para seleccionar</p>
-        <div id="drop-area">
-            <input type="file" id="fileElem" name="file" accept=".csv,.xlsx" onchange="handleFiles(this.files)">
-            <label class="button" for="fileElem">Seleccionar archivo</label>
-        </div>
-        <div id="gallery"></div>
-        
-        <br><br>
-       
-        <button id="submitButton" type="submit">Subir y procesar archivo</button>
-    </form>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <h1>Subir Archivo para procesar</h1>
+            <label for="grupo">Nombre del CSV:</label>
+            <input type="text" id="grupo" name="grupo" required>
 
-    <div class="loader" id="loader" style="display: none;"></div>
-    <p id="status"></p>
+            <label for="closer">Selecciona un Closer:</label>
+            <select id="closer" name="closer" required>
+                <option value="">Seleccione un Closer</option>
+                <option value="Mauro Gaitan">Mauro Gaitan</option>
+                <option value="Claudio Nicolini">Claudio Nicolini</option>
+                <option value="Carlos Tu">Carlos Tu</option>
+                <option value="Matias Sinigalle">Matias Sinigalle</option>
+                <option value="Walter Alegre">Walter Alegre</option>
+                <option value="Jose Santiago">Jose Santiago</option>
+            </select>
 
+            <p>Arrastra y suelta un archivo aquí o haz clic para seleccionar</p>
+            <div id="drop-area">
+                <input type="file" id="fileElem" name="file" accept=".csv,.xlsx" onchange="handleFiles(this.files)" hidden>
+                <label class="button" for="fileElem">Seleccionar archivo</label>
+            </div>
+            <div id="gallery"></div>
+
+            <button id="submitButton" type="submit" class="button">Subir y procesar archivo</button>
+        </form>
+        <div class="loader" id="loader"></div>
+        <p id="status"></p>
+    </div>
     <script>
         let dropArea = document.getElementById('drop-area');
         let fileInput = document.getElementById('fileElem');
-
-
 
         // Evitar el comportamiento por defecto de arrastrar y soltar
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -94,23 +181,36 @@
         document.getElementById('uploadForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             
-            const formData = new FormData(this);
-            const fileInput = document.getElementById('fileElem');
-            const grupoInput = document.getElementById('grupo').value;
+         const formData = new FormData(this);
+    const fileInput = document.getElementById('fileElem');
+    const grupoInput = document.getElementById('grupo').value;
+    const closerInput = document.getElementById('closer').value; // Obtener el closer seleccionado
 
-            if (fileInput.files.length === 0) {
-                document.getElementById('status').textContent = 'Por favor selecciona un archivo.';
-                return;
-            }
+    if (fileInput.files.length === 0) {
+        document.getElementById('status').textContent = 'Por favor selecciona un archivo.';
+        return;
+    }
 
-            document.getElementById('submitButton').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
-            
-            console.log('Enviando archivo:', fileInput.files[0].name);
-            console.log('Grupo:', grupoInput);
+    if (!closerInput) {
+        document.getElementById('status').textContent = 'Por favor selecciona un closer.';
+        return;
+    }
+
+    formData.append('closer', closerInput); // Agregar closer al FormData
+
+    console.log("Datos enviados:", {
+        grupo: grupoInput,
+        closer: closerInput,
+        archivo: fileInput.files[0].name
+    });
+
+    // Mostrar loader y ocultar botón de envío
+    document.getElementById('submitButton').style.display = 'none';
+    document.getElementById('loader').style.display = 'block';
+
 
             try {
-                const response = await fetch('https://back-crm-randazzo.onrender.com/upload-file', {
+                const response = await fetch('http://localhost:3000/upload-file', {
                     method: 'POST',
                     body: formData,
                 });
@@ -131,6 +231,7 @@
                 document.getElementById('status').textContent = 'Error procesando el archivo: ' + error.message;
             }
 
+            // Ocultar loader y mostrar botón de envío
             document.getElementById('loader').style.display = 'none';
             document.getElementById('submitButton').style.display = 'block';
         });
